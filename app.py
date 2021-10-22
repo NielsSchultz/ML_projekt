@@ -14,6 +14,7 @@ import datetime
 
 #NAME = "Reviews-pos-neg-cnn-{}".format(int(time.time()))
 log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+#
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 #downloader og extracter mappen med reviews
@@ -107,6 +108,7 @@ train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
+
 embedding_dim = 16
 model = tf.keras.Sequential([
   layers.Embedding(max_features + 1, embedding_dim),
@@ -199,7 +201,8 @@ export_model.predict(examples)
 import tempfile
 
 
-#gemmer den trænede model til en temp mappe med versionsnavn
+#gemmer den trænede model til en temp mappe med versionsnavn, tanken er at kører modellen op i en tensorflow/serving 
+#docker container som opretter et grpc endpoint som jeg kan bruge til at
 MODEL_DIR = tempfile.gettempdir()
 version = 1
 export_path = os.path.join(MODEL_DIR, str(version))
